@@ -5,7 +5,7 @@ numpy
 scipy
 librosa
 llvmlite
-fairseq
+git+https://github.com/facebookresearch/fairseq.git
 faiss-cpu
 gradio
 Cython

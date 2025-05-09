@@ -17,3 +17,4 @@ numba>=0.57.0
 python-dotenv>=1.0.0
 websockets>=11.0.2
 resampy>=0.4.2
+av

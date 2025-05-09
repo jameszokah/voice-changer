@@ -43,7 +43,7 @@ onnxruntime; sys_platform == 'darwin'
 onnxruntime-gpu; sys_platform != 'darwin'
 fastapi
 torchfcpe
-ffmpy==
+ffmpy
 python-dotenv
 av
 pyaudio

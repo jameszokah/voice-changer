@@ -18,3 +18,8 @@ python-dotenv>=1.0.0
 websockets>=11.0.2
 resampy>=0.4.2
 av
+llvmlite
+faiss-cpu
+pydub
+Pillow
+scikit-learn

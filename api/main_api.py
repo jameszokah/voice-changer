@@ -32,10 +32,10 @@ from infer.lib.infer_pack.models import (
     SynthesizerTrnMs768NSFsid_nono,
 )
 from infer.lib.audio import load_audio
-from infer.lib.train.process_ckpt import checkpoint_utils
+from  fairseq import checkpoint_utils
 
 # Create FastAPI app
-app = FastAPI(title="AniVoiceChanger API", 
+app = FastAPI(title="VoiceChanger API", 
               description="API for voice conversion using RVC models",
               version="1.0.0")
 
@@ -61,7 +61,7 @@ GPU_INDEX = getenv('GPU_INDEX', '0')
 
 # Audio processing settings
 CHUNK = 1024
-TEMP_DIR = BASE_DIR / 'AniVoiceChanger' / 'audio' / 'temp'
+TEMP_DIR = BASE_DIR / 'voiceChanger' / 'audio' / 'temp'
 TEMP_DIR.mkdir(parents=True, exist_ok=True)
 
 # Input validation model
@@ -159,7 +159,7 @@ model_cache = {}  # Cache for loaded models
 
 def load_hubert():
     """Load the HuBERT model"""
-    models, saved_cfg, task = checkpoint_utils.load_model_ensemble_and_task(['hubert_base.pt'], suffix='', )
+    models, saved_cfg, task = checkpoint_utils.load_model_ensemble_and_task(['assets/hubert/hubert_base.pt'], suffix='', )
     hubert = models[0]
     hubert = hubert.to(device)
 
@@ -178,7 +178,7 @@ def get_vc(model_name):
         return model_cache[model_name]
     
     # Load the model
-    model_path = BASE_DIR / 'weights' / f'{model_name}.pth'
+    model_path = BASE_DIR / 'assets' / 'weights' / f'{model_name}.pth'
     if not model_path.exists():
         raise HTTPException(status_code=404, detail=f"Model {model_name} not found. Make sure it exists in the weights directory.")
 
@@ -223,7 +223,7 @@ def process_audio(input_path, output_path, params: VoiceConversionParams):
     cpt, version, net_g, tgt_sr, vc = get_vc(params.model_name)
     
     # Find index file
-    logs_dir = BASE_DIR / 'logs' / params.model_name
+    logs_dir = BASE_DIR / 'assets' / 'weights' / params.model_name
     index_path = ''
     if logs_dir.exists():
         for file in logs_dir.iterdir():
@@ -277,7 +277,7 @@ async def root():
 @app.get("/models")
 async def get_models():
     """List available models"""
-    models_dir = BASE_DIR / 'weights'
+    models_dir = BASE_DIR / 'assets' / 'weights'
     if not models_dir.exists():
         return {"models": []}
     
